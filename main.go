@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -21,7 +22,9 @@ func paragraph(line string) string {
 }
 
 func anchor(line string) string {
-	return line
+	linkRegex := regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
+	convertedLine := linkRegex.ReplaceAllString(line, `<a href="$2">$1</a>`)
+	return convertedLine
 }
 
 func main() {
@@ -54,6 +57,7 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
+		line = anchor(line)
 		if strings.HasPrefix(line, "#") {
 			html += headings(line) + "\n"
 		} else if len(line) >= 1 {
