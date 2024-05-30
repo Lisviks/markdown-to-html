@@ -28,7 +28,7 @@ func anchor(line string) string {
 }
 
 func inlineCode(line string) string {
-	codeRegex := regexp.MustCompile("(?<!`)`([^`]+)`(?!`)")
+	codeRegex := regexp.MustCompile("`([^`]+)`")
 	convertedLine := codeRegex.ReplaceAllString(line, "<code>$1</code>")
 	return convertedLine
 }
@@ -59,16 +59,32 @@ func main() {
 	defer file.Close()
 
 	html := ""
-
+	inCodeBlock := false
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
-		line = anchor(line)
-		line = inlineCode(line)
-		if strings.HasPrefix(line, "#") {
-			html += headings(line) + "\n"
-		} else if len(line) >= 1 {
-			html += paragraph(line) + "\n"
+
+		if inCodeBlock {
+			if strings.HasPrefix(line, "```") {
+				inCodeBlock = false
+				html += "</code></pre>\n"
+				continue
+			}
+			html += line + "\n"
+		} else {
+			if strings.HasPrefix(line, "```") {
+				inCodeBlock = true
+				html += "<pre><code>"
+				continue
+			}
+
+			line = anchor(line)
+			line = inlineCode(line)
+			if strings.HasPrefix(line, "#") {
+				html += headings(line) + "\n"
+			} else if len(line) >= 1 {
+				html += paragraph(line) + "\n"
+			}
 		}
 	}
 
