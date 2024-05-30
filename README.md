@@ -1,16 +1,22 @@
-# This is a heading
+# Markdown to HTML
 
-And this would be just a normal paragraph. Now let's see how to open this file with GO and change it to HTML.
+A simple markdown to HTML converter written in Go. It kind of works. It only supports part of the markdown.
 
-This another paragraph with a link to [GitHub](https://github.com). Which should be converted somehow to HTML from markdown.
+## Usage
 
-Also there is some text with inline code `num := 1` in the middle of the text.
+1. Build the app
 
 ```
-// This is a code block
-func sum(x int, y int) int {
-    return x + y
-}
+git clone https://github.com/Lisviks/markdown-to-html.git
+cd markdown-to-html
+go build
 ```
 
-Some _italic_ and __bold__ and then some *__italic bold__*
+2. Convert markdown to HTML
+
+```
+./md-to-html sample.md          # On Unix systems
+md-to-html.exe sample.md        # On Windows
+```
+
+Replace `sample.md` with the path to your markdown file. Output file will be named the same as the input. In this case it will be named `sample.html`
