@@ -33,6 +33,18 @@ func inlineCode(line string) string {
 	return convertedLine
 }
 
+func bold(line string) string {
+	boldRegex := regexp.MustCompile(`\*\*(.*?)\*\*|__(.*?)__`)
+	convertedLine := boldRegex.ReplaceAllString(line, "<strong>$1$2</strong>")
+	return convertedLine
+}
+
+func italic(line string) string {
+	italicRegex := regexp.MustCompile(`\*(.*?)\*|_(.*?)_`)
+	convertedLine := italicRegex.ReplaceAllString(line, "<em>$1$2</em>")
+	return convertedLine
+}
+
 func main() {
 	args := os.Args[1:]
 
@@ -80,6 +92,8 @@ func main() {
 
 			line = anchor(line)
 			line = inlineCode(line)
+			line = bold(line)
+			line = italic(line)
 			if strings.HasPrefix(line, "#") {
 				html += headings(line) + "\n"
 			} else if len(line) >= 1 {

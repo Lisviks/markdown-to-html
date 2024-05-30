@@ -12,3 +12,5 @@ func sum(x int, y int) int {
     return x + y
 }
 ```
+
+Some _italic_ and __bold__ and then some *__italic bold__*
