@@ -28,7 +28,7 @@ func main() {
 	args := os.Args[1:]
 
 	if len(args) == 0 {
-		fmt.Println("No markdown file provided")
+		fmt.Println("No markdown file provided.")
 		return
 	}
 
@@ -37,6 +37,10 @@ func main() {
 	ext := filepath.Ext(fileNameWithExt)
 	inputFileName := strings.TrimSuffix(fileNameWithExt, ext)
 
+	if ext != ".md" {
+		fmt.Println("Provide a markdown file.")
+		return
+	}
 	file, err := os.Open(filePath)
 
 	if err != nil {
