@@ -28,7 +28,7 @@ func anchor(line string) string {
 }
 
 func inlineCode(line string) string {
-	codeRegex := regexp.MustCompile("`([^`]+)`")
+	codeRegex := regexp.MustCompile("(?<!`)`([^`]+)`(?!`)")
 	convertedLine := codeRegex.ReplaceAllString(line, "<code>$1</code>")
 	return convertedLine
 }
