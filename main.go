@@ -105,6 +105,12 @@ func main() {
 	data := []byte(html)
 
 	var fileName string
+	path := filepath.Join(".", "out")
+	err = os.MkdirAll(path, 0755)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	if len(args) == 2 {
 		fileName = args[1] + ".html"
@@ -112,7 +118,7 @@ func main() {
 		fileName = inputFileName + ".html"
 	}
 
-	e := os.WriteFile(fileName, data, 0644)
+	e := os.WriteFile("out/"+fileName, data, 0644)
 	if err != nil {
 		log.Fatal(e)
 	}
