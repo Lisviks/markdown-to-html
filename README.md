@@ -19,4 +19,9 @@ go build
 md-to-html.exe sample.md        # On Windows
 ```
 
-Replace `sample.md` with the path to your markdown file. Output file will be named the same as the input. In this case it will be named `sample.html`
+Replace `sample.md` with the path to your markdown file. Output file will be named the same as the input. In this case it will be named `sample.html`. To output a file with a different name add a second argument. HTML files will be created inside `/out` directory.
+
+```
+./md-to-html sample.md index          # On Unix systems
+md-to-html.exe sample.md index        # On Windows
+```
