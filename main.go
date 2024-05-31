@@ -104,7 +104,14 @@ func main() {
 
 	data := []byte(html)
 
-	fileName := inputFileName + ".html"
+	var fileName string
+
+	if len(args) == 2 {
+		fileName = args[1] + ".html"
+	} else {
+		fileName = inputFileName + ".html"
+	}
+
 	e := os.WriteFile(fileName, data, 0644)
 	if err != nil {
 		log.Fatal(e)
