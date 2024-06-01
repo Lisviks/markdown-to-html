@@ -22,8 +22,16 @@ func paragraph(line string) string {
 }
 
 func anchor(line string) string {
-	linkRegex := regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
-	convertedLine := linkRegex.ReplaceAllString(line, `<a href="$2">$1</a>`)
+	linkRegex := regexp.MustCompile(`(!?)\[(.*?)\]\((.*?)\)`)
+	convertedLine := linkRegex.ReplaceAllStringFunc(line, func(s string) string {
+		parts := linkRegex.FindStringSubmatch(s)
+
+		if parts[1] == "!" {
+			return s
+		}
+		return `<a href="` + parts[3] + `">` + parts[2] + `</a>`
+	})
+
 	return convertedLine
 }
 
@@ -42,6 +50,12 @@ func bold(line string) string {
 func italic(line string) string {
 	italicRegex := regexp.MustCompile(`\*(.*?)\*|_(.*?)_`)
 	convertedLine := italicRegex.ReplaceAllString(line, "<em>$1$2</em>")
+	return convertedLine
+}
+
+func imageTag(line string) string {
+	imageRegex := regexp.MustCompile(`!\[(.*?)\]\((.*?)\)`)
+	convertedLine := imageRegex.ReplaceAllString(line, `<img src="$2" alt="$1">`)
 	return convertedLine
 }
 
@@ -94,8 +108,11 @@ func main() {
 			line = inlineCode(line)
 			line = bold(line)
 			line = italic(line)
+			line = imageTag(line)
 			if strings.HasPrefix(line, "#") {
 				html += headings(line) + "\n"
+			} else if strings.HasPrefix(line, "![") {
+				html += imageTag(line) + "\n"
 			} else if len(line) >= 1 {
 				html += paragraph(line) + "\n"
 			}
