@@ -111,10 +111,10 @@ func main() {
 			line = imageTag(line)
 			if strings.HasPrefix(line, "#") {
 				html += headings(line) + "\n"
-			} else if strings.HasPrefix(line, "![") {
-				html += imageTag(line) + "\n"
-			} else if len(line) >= 1 {
+			} else if len(line) >= 1 && !strings.HasPrefix(line, "<") {
 				html += paragraph(line) + "\n"
+			} else if strings.HasPrefix(line, "<") {
+				html += line + "\n"
 			}
 		}
 	}

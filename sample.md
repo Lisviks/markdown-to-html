@@ -6,6 +6,8 @@ This another paragraph with a link to [GitHub](https://github.com). Which should
 
 Also there is some text with inline code `num := 1` in the middle of the text.
 
+[Google](https://google.com)
+
 ```
 // This is a code block
 func sum(x int, y int) int {
