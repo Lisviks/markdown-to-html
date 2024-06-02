@@ -59,6 +59,12 @@ func imageTag(line string) string {
 	return convertedLine
 }
 
+func listItem(line string) string {
+	li := strings.Replace(line, "- ", "<li>", 1)
+	li += "</li>\n"
+	return li
+}
+
 func main() {
 	args := os.Args[1:]
 
@@ -86,21 +92,36 @@ func main() {
 
 	html := ""
 	inCodeBlock := false
+	inUnorderedListBlock := false
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		if inCodeBlock {
-			if strings.HasPrefix(line, "```") {
-				inCodeBlock = false
-				html += "</code></pre>\n"
-				continue
+		if inCodeBlock || inUnorderedListBlock {
+			if inCodeBlock {
+				if strings.HasPrefix(line, "```") {
+					inCodeBlock = false
+					html += "</code></pre>\n"
+					continue
+				}
+				html += line + "\n"
+			} else if inUnorderedListBlock {
+				if !strings.HasPrefix(line, "- ") {
+					inUnorderedListBlock = false
+					html += "</ul>\n"
+					continue
+				}
+				html += listItem(line)
 			}
-			html += line + "\n"
 		} else {
 			if strings.HasPrefix(line, "```") {
 				inCodeBlock = true
 				html += "<pre><code>"
+				continue
+			}
+			if strings.HasPrefix(line, "- ") {
+				inUnorderedListBlock = true
+				html += "<ul>\n"
 				continue
 			}
 
@@ -140,7 +161,7 @@ func main() {
 		fileName = inputFileName + ".html"
 	}
 
-	e := os.WriteFile(args[2]+"/"+fileName, data, 0644)
+	e := os.WriteFile(path+"/"+fileName, data, 0644)
 	if err != nil {
 		log.Fatal(e)
 	}

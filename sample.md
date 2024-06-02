@@ -15,6 +15,11 @@ func sum(x int, y int) int {
 }
 ```
 
+- list item
+- another one
+- maybe one more
+- and one more - like this
+
 Some _italic_ and __bold__ and then some *__italic bold__*
 
 ![Mountains](https://images.pexels.com/photos/12784538/pexels-photo-12784538.jpeg)
