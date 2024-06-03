@@ -65,6 +65,13 @@ func listItem(line string) string {
 	return li
 }
 
+func orderedListItem(line string) string {
+	regex := regexp.MustCompile(`^(?:\s*)(\d+)\.\s+(.+)`)
+	li := regex.ReplaceAllString(line, `<li>$2`)
+	li += "</li>\n"
+	return li
+}
+
 func main() {
 	args := os.Args[1:]
 
@@ -93,11 +100,12 @@ func main() {
 	html := ""
 	inCodeBlock := false
 	inUnorderedListBlock := false
+	inOnrderedListBlock := false
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
-
-		if inCodeBlock || inUnorderedListBlock {
+		orderedListRegex := regexp.MustCompile(`^(?:\s*)(\d+)\.\s+(.+)`)
+		if inCodeBlock || inUnorderedListBlock || inOnrderedListBlock {
 			if inCodeBlock {
 				if strings.HasPrefix(line, "```") {
 					inCodeBlock = false
@@ -112,6 +120,13 @@ func main() {
 					continue
 				}
 				html += listItem(line)
+			} else if inOnrderedListBlock {
+				if !orderedListRegex.MatchString(line) {
+					inOnrderedListBlock = false
+					html += "</ol>\n"
+					continue
+				}
+				html += orderedListItem(line)
 			}
 		} else {
 			if strings.HasPrefix(line, "```") {
@@ -122,6 +137,11 @@ func main() {
 			if strings.HasPrefix(line, "- ") {
 				inUnorderedListBlock = true
 				html += "<ul>\n"
+				continue
+			}
+			if orderedListRegex.MatchString(line) {
+				inOnrderedListBlock = true
+				html += "<ol>\n"
 				continue
 			}
 
