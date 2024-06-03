@@ -59,7 +59,7 @@ func imageTag(line string) string {
 	return convertedLine
 }
 
-func listItem(line string) string {
+func unorderedListItem(line string) string {
 	li := strings.Replace(line, "- ", "<li>", 1)
 	li += "</li>\n"
 	return li
@@ -119,7 +119,7 @@ func main() {
 					html += "</ul>\n"
 					continue
 				}
-				html += listItem(line)
+				html += unorderedListItem(line)
 			} else if inOnrderedListBlock {
 				if !orderedListRegex.MatchString(line) {
 					inOnrderedListBlock = false
@@ -136,12 +136,12 @@ func main() {
 			}
 			if strings.HasPrefix(line, "- ") {
 				inUnorderedListBlock = true
-				html += "<ul>\n"
+				html += "<ul>\n" + unorderedListItem(line)
 				continue
 			}
 			if orderedListRegex.MatchString(line) {
 				inOnrderedListBlock = true
-				html += "<ol>\n"
+				html += "<ol>\n" + orderedListItem(line)
 				continue
 			}
 
