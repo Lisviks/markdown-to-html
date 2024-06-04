@@ -22,9 +22,9 @@ func paragraph(line string) string {
 }
 
 func anchor(line string) string {
-	linkRegex := regexp.MustCompile(`(!?)\[(.*?)\]\((.*?)\)`)
-	convertedLine := linkRegex.ReplaceAllStringFunc(line, func(s string) string {
-		parts := linkRegex.FindStringSubmatch(s)
+	regex := regexp.MustCompile(`(!?)\[(.*?)\]\((.*?)\)`)
+	line = regex.ReplaceAllStringFunc(line, func(s string) string {
+		parts := regex.FindStringSubmatch(s)
 
 		if parts[1] == "!" {
 			return s
@@ -32,31 +32,31 @@ func anchor(line string) string {
 		return `<a href="` + parts[3] + `">` + parts[2] + `</a>`
 	})
 
-	return convertedLine
+	return line
 }
 
 func inlineCode(line string) string {
-	codeRegex := regexp.MustCompile("`([^`]+)`")
-	convertedLine := codeRegex.ReplaceAllString(line, "<code>$1</code>")
-	return convertedLine
+	regex := regexp.MustCompile("`([^`]+)`")
+	line = regex.ReplaceAllString(line, "<code>$1</code>")
+	return line
 }
 
 func bold(line string) string {
-	boldRegex := regexp.MustCompile(`\*\*(.*?)\*\*|__(.*?)__`)
-	convertedLine := boldRegex.ReplaceAllString(line, "<strong>$1$2</strong>")
-	return convertedLine
+	regex := regexp.MustCompile(`\*\*(.*?)\*\*|__(.*?)__`)
+	line = regex.ReplaceAllString(line, "<strong>$1$2</strong>")
+	return line
 }
 
 func italic(line string) string {
-	italicRegex := regexp.MustCompile(`\*(.*?)\*|_(.*?)_`)
-	convertedLine := italicRegex.ReplaceAllString(line, "<em>$1$2</em>")
-	return convertedLine
+	regex := regexp.MustCompile(`\*(.*?)\*|_(.*?)_`)
+	line = regex.ReplaceAllString(line, "<em>$1$2</em>")
+	return line
 }
 
 func imageTag(line string) string {
-	imageRegex := regexp.MustCompile(`!\[(.*?)\]\((.*?)\)`)
-	convertedLine := imageRegex.ReplaceAllString(line, `<img src="$2" alt="$1">`)
-	return convertedLine
+	regex := regexp.MustCompile(`!\[(.*?)\]\((.*?)\)`)
+	line = regex.ReplaceAllString(line, `<img src="$2" alt="$1">`)
+	return line
 }
 
 func unorderedListItem(line string) string {
