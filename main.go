@@ -97,7 +97,7 @@ func main() {
 
 	defer file.Close()
 
-	html := ""
+	html := "<article>\n"
 	inCodeBlock := false
 	inUnorderedListBlock := false
 	inOnrderedListBlock := false
@@ -160,6 +160,7 @@ func main() {
 		}
 	}
 
+	html += "</article>\n"
 	data := []byte(html)
 
 	var fileName string
